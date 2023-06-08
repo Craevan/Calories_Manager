@@ -1,7 +1,7 @@
 package com.crevan.manager.util;
 
 import com.crevan.manager.model.Meal;
-import com.crevan.manager.model.MealTo;
+import com.crevan.manager.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
