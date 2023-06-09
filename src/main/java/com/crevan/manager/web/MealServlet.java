@@ -1,6 +1,6 @@
 package com.crevan.manager.web;
 
-import com.crevan.manager.repository.InMemoryMealRepository;
+import com.crevan.manager.repository.inmemory.InMemoryMealRepository;
 import com.crevan.manager.repository.MealRepository;
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.util.MealsUtil;

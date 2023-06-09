@@ -1,6 +1,7 @@
-package com.crevan.manager.repository;
+package com.crevan.manager.repository.inmemory;
 
 import com.crevan.manager.model.Meal;
+import com.crevan.manager.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
