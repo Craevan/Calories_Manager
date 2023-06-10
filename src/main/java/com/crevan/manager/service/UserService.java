@@ -2,15 +2,21 @@ package com.crevan.manager.service;
 
 import com.crevan.manager.model.User;
 import com.crevan.manager.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.crevan.manager.util.ValidationUtil.checkNotFound;
 import static com.crevan.manager.util.ValidationUtil.checkNotFoundWithId;
 
+@Service
 public class UserService {
 
-    private UserRepository repository;
+    private final UserRepository repository;
+
+    public UserService(final UserRepository repository) {
+        this.repository = repository;
+    }
 
     public User create(final User user) {
         return repository.save(user);

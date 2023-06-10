@@ -3,6 +3,7 @@ package com.crevan.manager.web.user;
 import com.crevan.manager.model.User;
 import com.crevan.manager.service.UserService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public abstract class AbstractUserController {
 
     protected final Logger log = getLogger(getClass());
 
+    @Autowired
     private UserService service;
 
     public List<User> getAll() {
