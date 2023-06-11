@@ -4,6 +4,7 @@ import com.crevan.manager.model.Meal;
 import com.crevan.manager.repository.MealRepository;
 import com.crevan.manager.util.MealsUtil;
 import com.crevan.manager.util.Util;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import static com.crevan.manager.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static com.crevan.manager.repository.inmemory.InMemoryUserRepository.USER_ID;
 
+@Repository
 public class InMemoryMealRepository implements MealRepository {
 
     private static final Map<Integer, Map<Integer, Meal>> usersMealsMap = new ConcurrentHashMap<>();
