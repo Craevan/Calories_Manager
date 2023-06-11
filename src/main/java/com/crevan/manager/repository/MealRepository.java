@@ -1,10 +1,12 @@
 package com.crevan.manager.repository;
 
 import com.crevan.manager.model.Meal;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public interface MealRepository {
 
     Meal save(final Meal meal, final int userId);
