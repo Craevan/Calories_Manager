@@ -1,8 +1,8 @@
 package com.crevan.manager.web;
 
-import com.crevan.manager.repository.inmemory.InMemoryMealRepository;
-import com.crevan.manager.repository.MealRepository;
 import com.crevan.manager.model.Meal;
+import com.crevan.manager.repository.MealRepository;
+import com.crevan.manager.repository.inmemory.InMemoryMealRepository;
 import com.crevan.manager.util.MealsUtil;
 import org.slf4j.Logger;
 
@@ -32,7 +32,7 @@ public class MealServlet extends HttpServlet {
             case ("create"), ("edit") -> {
                 Meal meal = "create".equals(action) ?
                         new Meal(MealsUtil.DEFAULT_CALORIES_COUNT, "", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)) :
-                        database.get(getInteger(req.getParameter("id")));
+                        database.get(getInteger(req.getParameter("id")), SecurityUtil.authUserId());
                 log.info("Create/Edit meal={}", meal);
                 req.setAttribute("meal", meal);
                 req.getRequestDispatcher("/editMeal.jsp").forward(req, resp);
@@ -40,12 +40,12 @@ public class MealServlet extends HttpServlet {
             case ("delete") -> {
                 int id = getInteger(req.getParameter("id"));
                 log.info("Delete meal with id={}", id);
-                database.delete(id);
+                database.delete(id, SecurityUtil.authUserId());
                 resp.sendRedirect("meals");
             }
             default -> {
                 log.info("Get all meals");
-                req.setAttribute("meals", MealsUtil.getTos(database.getAll(), MealsUtil.DEFAULT_CALORIES_COUNT));
+                req.setAttribute("meals", MealsUtil.getTos(database.getAll(SecurityUtil.authUserId()), MealsUtil.DEFAULT_CALORIES_COUNT));
                 req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             }
         }
@@ -58,15 +58,15 @@ public class MealServlet extends HttpServlet {
         String description = req.getParameter("description");
         LocalDateTime ldt = LocalDateTime.parse(req.getParameter("date"));
         int calories = getInteger(req.getParameter("calories"));
+        Meal meal;
         if (id.isEmpty()) {
-            Meal meal = new Meal(calories, description, ldt);
+            meal = new Meal(calories, description, ldt);
             log.info("Saving new meal={}", meal);
-            database.save(meal);
         } else {
-            Meal meal = new Meal(getInteger(id), calories, description, ldt);
+            meal = new Meal(getInteger(id), calories, description, ldt);
             log.info("Updating meal={}", meal);
-            database.update(meal);
         }
+        database.save(meal, SecurityUtil.authUserId());
         resp.sendRedirect("meals");
     }
 
