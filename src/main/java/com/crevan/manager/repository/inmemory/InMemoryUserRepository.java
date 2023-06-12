@@ -6,38 +6,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
 
-    public static final int USER_ID = 1;
-    public static final int ADMIN_ID = 2;
-
-    private static final Map<Integer, User> userMap = new ConcurrentHashMap<>();
-    private static final AtomicInteger counter = new AtomicInteger(0);
-
-    @Override
-    public User save(final User user) {
-        if (user.isNew()) {
-            user.setId(counter.incrementAndGet());
-            userMap.put(user.getId(), user);
-            return user;
-        }
-        return userMap.computeIfPresent(user.getId(), (id, oldUser) -> user);
-    }
-
-    @Override
-    public User get(final int id) {
-        return userMap.get(id);
-    }
+    static final int USER_ID = 1;
+    static final int ADMIN_ID = 2;
 
     @Override
     public User getByEmail(final String email) {
-        return userMap.values().stream()
+        return getCollection().stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
                 .orElse(null);
@@ -45,13 +24,8 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return userMap.values().stream()
+        return getCollection().stream()
                 .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean delete(final int id) {
-        return userMap.remove(id) != null;
     }
 }
