@@ -12,9 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static com.crevan.manager.util.DateTimeUtil.parseLocalDate;
+import static com.crevan.manager.util.DateTimeUtil.parseLocalTime;
 
 public class MealServlet extends HttpServlet {
 
@@ -43,12 +48,20 @@ public class MealServlet extends HttpServlet {
                         new Meal(MealsUtil.DEFAULT_CALORIES_COUNT, "", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)) :
                         mealController.get(getId(req));
                 req.setAttribute("meal", meal);
-                req.getRequestDispatcher("/editMeal.jsp").forward(req, resp);
+                req.getRequestDispatcher("/mealForm.jsp").forward(req, resp);
             }
             case ("delete") -> {
                 int id = getId(req);
                 mealController.delete(id);
                 resp.sendRedirect("meals");
+            }
+            case ("filter") -> {
+                LocalDate startDate = parseLocalDate(req.getParameter("startDate"));
+                LocalDate endDate = parseLocalDate(req.getParameter("endDate"));
+                LocalTime startTime = parseLocalTime(req.getParameter("startTime"));
+                LocalTime endTime = parseLocalTime(req.getParameter("endTime"));
+                req.setAttribute("meals", mealController.getBetween(startDate, startTime, endDate, endTime));
+                req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             }
             default -> {
                 req.setAttribute("meals", mealController.getAll());
