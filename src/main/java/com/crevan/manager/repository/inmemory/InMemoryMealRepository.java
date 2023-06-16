@@ -4,8 +4,12 @@ import com.crevan.manager.model.Meal;
 import com.crevan.manager.repository.MealRepository;
 import com.crevan.manager.util.MealsUtil;
 import com.crevan.manager.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collections;
@@ -22,11 +26,23 @@ import static com.crevan.manager.repository.inmemory.InMemoryUserRepository.USER
 @Repository
 public class InMemoryMealRepository implements MealRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
+
     private static final Map<Integer, InMemoryBaseRepository<Meal>> usersMealsMap = new ConcurrentHashMap<>();
     {
         MealsUtil.meals.forEach(meal -> save(meal, USER_ID));
         save(new Meal(510, "Админ ланч", LocalDateTime.of(2015, Month.JUNE, 1, 14, 0)), ADMIN_ID);
         save(new Meal(1500, "Админ ужин", LocalDateTime.of(2015, Month.JUNE, 1, 21, 0)), ADMIN_ID);
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.info("+++ PostConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.info("+++ PreDestroy");
     }
 
     @Override
