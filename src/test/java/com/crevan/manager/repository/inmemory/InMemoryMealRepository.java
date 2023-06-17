@@ -20,8 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.crevan.manager.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
-import static com.crevan.manager.repository.inmemory.InMemoryUserRepository.USER_ID;
+import static com.crevan.manager.UserTestData.ADMIN_ID;
+import static com.crevan.manager.UserTestData.USER_ID;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
