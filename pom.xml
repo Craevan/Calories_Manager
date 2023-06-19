@@ -22,6 +22,9 @@
         <!-- Spring -->
         <spring.version>5.3.27</spring.version>
 
+        <!--DB-->
+        <postgresql.version>42.6.0</postgresql.version>
+
         <!--    Tests  -->
         <junit.version>4.13.2</junit.version>
     </properties>
@@ -39,6 +42,13 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--DataBase-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <!--Web-->
