@@ -4,6 +4,10 @@ public class AbstractNamedEntity extends AbstractBaseEntity {
 
     protected String name;
 
+    protected AbstractNamedEntity() {
+
+    }
+
     protected AbstractNamedEntity(final Integer id, final String name) {
         super(id);
         this.name = name;
