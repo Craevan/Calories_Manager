@@ -1,10 +1,12 @@
 package com.crevan.manager.web;
 
+import com.crevan.manager.model.AbstractBaseEntity;
+
 import static com.crevan.manager.util.MealsUtil.DEFAULT_CALORIES_COUNT;
 
 public class SecurityUtil {
 
-    private static int id = 1;
+    private static int id = AbstractBaseEntity.START_SEQ;
 
     public static int authUserId() {
         return id;
