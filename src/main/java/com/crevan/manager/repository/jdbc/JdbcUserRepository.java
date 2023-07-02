@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -33,21 +33,14 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public User save(final User user) {
-        MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", user.getId())
-                .addValue("name", user.getName())
-                .addValue("email", user.getEmail())
-                .addValue("password", user.getPassword())
-                .addValue("registered", user.getRegistered())
-                .addValue("enabled", user.isEnabled())
-                .addValue("caloriesPerDay", user.getCaloriesPerDay());
+        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 
         if (user.isNew()) {
-            Number numKey = insertUser.executeAndReturnKey(map);
+            Number numKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(numKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
                 "UPDATE users SET name=:name, email=:email, password=:password, registered=:registered," +
-                        " enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map) == 0) {
+                        " enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
             return null;
         }
         return user;
