@@ -1,8 +1,9 @@
 package com.crevan.manager.repository.inmemory;
 
+import com.crevan.manager.MealTestData;
+import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.repository.MealRepository;
-import com.crevan.manager.util.MealsUtil;
 import com.crevan.manager.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -20,19 +20,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.crevan.manager.UserTestData.ADMIN_ID;
-import static com.crevan.manager.UserTestData.USER_ID;
-
 @Repository
 public class InMemoryMealRepository implements MealRepository {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
 
-    private static final Map<Integer, InMemoryBaseRepository<Meal>> usersMealsMap = new ConcurrentHashMap<>();
+    private final Map<Integer, InMemoryBaseRepository<Meal>> usersMealsMap = new ConcurrentHashMap<>();
+
     {
-        MealsUtil.meals.forEach(meal -> save(meal, USER_ID));
-        save(new Meal(510, "Админ ланч", LocalDateTime.of(2015, Month.JUNE, 1, 14, 0)), ADMIN_ID);
-        save(new Meal(1500, "Админ ужин", LocalDateTime.of(2015, Month.JUNE, 1, 21, 0)), ADMIN_ID);
+        InMemoryBaseRepository<Meal> userMeals = new InMemoryBaseRepository<>();
+        MealTestData.meals.forEach(userMeals::put);
+        usersMealsMap.put(UserTestData.USER_ID, userMeals);
     }
 
     @PostConstruct

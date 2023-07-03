@@ -45,7 +45,7 @@ public class MealServlet extends HttpServlet {
         switch (action == null ? "" : action) {
             case ("create"), ("edit") -> {
                 final Meal meal = "create".equals(action) ?
-                        new Meal(MealsUtil.DEFAULT_CALORIES_COUNT, "", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)) :
+                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", MealsUtil.DEFAULT_CALORIES_COUNT) :
                         mealController.get(getId(req));
                 req.setAttribute("meal", meal);
                 req.getRequestDispatcher("/mealForm.jsp").forward(req, resp);
@@ -74,9 +74,9 @@ public class MealServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(
-                Integer.parseInt(req.getParameter("calories")),
+                LocalDateTime.parse(req.getParameter("date")),
                 req.getParameter("description"),
-                LocalDateTime.parse(req.getParameter("date"))
+                Integer.parseInt(req.getParameter("calories"))
         );
         if (StringUtils.hasLength(req.getParameter("id"))) {
             mealController.update(meal, getId(req));
