@@ -1,5 +1,7 @@
 package com.crevan.manager.model;
 
+import org.springframework.util.Assert;
+
 public class AbstractBaseEntity {
 
     public static final int START_SEQ = 100000;
@@ -15,6 +17,11 @@ public class AbstractBaseEntity {
     }
 
     public Integer getId() {
+        return id;
+    }
+
+    public Integer id() {
+        Assert.notNull(id, "Entity must have id");
         return id;
     }
 

@@ -3,6 +3,7 @@ package com.crevan.manager.service;
 import com.crevan.manager.model.User;
 import com.crevan.manager.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class UserService {
     }
 
     public User create(final User user) {
+        Assert.notNull(user, "user must be not null");
         return repository.save(user);
     }
 
@@ -31,6 +33,7 @@ public class UserService {
     }
 
     public User getByEmail(final String email) {
+        Assert.notNull(email, "email must be not null");
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
@@ -39,6 +42,7 @@ public class UserService {
     }
 
     public void update(final User user) {
+        Assert.notNull(user, "user must be not null");
         checkNotFoundWithId(repository.save(user), user.getId());
     }
 }

@@ -15,6 +15,9 @@ public class MealsUtil {
 
     public static final int DEFAULT_CALORIES_COUNT = 2000;
 
+    private MealsUtil() {
+    }
+
     public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay) {
         return filterByPredicate(meals, caloriesPerDay, meal -> true);
     }

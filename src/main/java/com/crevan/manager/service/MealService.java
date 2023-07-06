@@ -6,6 +6,7 @@ import com.crevan.manager.util.DateTimeUtil;
 import com.crevan.manager.util.ValidationUtil;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,10 +41,12 @@ public class MealService {
     }
 
     public void update(final Meal meal, final int userId) {
+        Assert.notNull(meal, "meal must be not null");
         ValidationUtil.checkNotFoundWithId(repository.save(meal, userId), userId);
     }
 
     public Meal create(final Meal meal, final int userId) {
+        Assert.notNull(meal, "meal must be not null");
         return repository.save(meal, userId);
     }
 }

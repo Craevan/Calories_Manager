@@ -12,10 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -45,6 +42,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal save(final Meal meal, final int userId) {
+        Objects.requireNonNull(meal, "Meal must be not null");
         InMemoryBaseRepository<Meal> meals = usersMealsMap.computeIfAbsent(userId, uId -> new InMemoryBaseRepository<>());
         return meals.save(meal);
     }
