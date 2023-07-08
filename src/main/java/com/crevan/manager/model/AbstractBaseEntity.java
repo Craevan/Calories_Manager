@@ -2,10 +2,17 @@ package com.crevan.manager.model;
 
 import org.springframework.util.Assert;
 
+import javax.persistence.*;
+
+@MappedSuperclass
+@Access(AccessType.FIELD)
 public class AbstractBaseEntity {
 
     public static final int START_SEQ = 100000;
 
+    @Id
+    @SequenceGenerator(name = "global_sec", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_sec")
     protected Integer id;
 
     protected AbstractBaseEntity() {

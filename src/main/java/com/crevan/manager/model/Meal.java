@@ -1,5 +1,7 @@
 package com.crevan.manager.model;
 
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,6 +11,9 @@ public class Meal extends AbstractBaseEntity {
     private int calories;
     private String description;
     private LocalDateTime dateTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     public Meal() {
     }
