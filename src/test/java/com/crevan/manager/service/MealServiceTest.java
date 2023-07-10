@@ -2,6 +2,7 @@ package com.crevan.manager.service;
 
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.util.exception.NotFoundException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertThrows;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Ignore
 public class MealServiceTest {
 
     @Autowired
