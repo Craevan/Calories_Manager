@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.crevan.manager.UserTestData.*;
 
@@ -35,6 +34,6 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
     public List<User> getAll() {
         return getCollection().stream()
                 .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
-                .collect(Collectors.toList());
+                .toList();
     }
 }
