@@ -1,5 +1,6 @@
 package com.crevan.manager.service;
 
+import com.crevan.manager.Profiles;
 import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -24,6 +26,7 @@ import static org.junit.Assert.assertThrows;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles(Profiles.ACTIVE_DB)
 public class UserServiceTest {
 
     @Autowired
