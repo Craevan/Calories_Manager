@@ -1,6 +1,6 @@
 package com.crevan.manager.service;
 
-import com.crevan.manager.Profiles;
+import com.crevan.manager.ActiveDbProfileResolver;
 import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThrows;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.ACTIVE_DB)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public class UserServiceTest {
 
     @Autowired
