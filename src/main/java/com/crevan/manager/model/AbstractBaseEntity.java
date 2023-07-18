@@ -1,13 +1,14 @@
 package com.crevan.manager.model;
 
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public class AbstractBaseEntity {
+public class AbstractBaseEntity implements Persistable<Integer> {
 
     public static final int START_SEQ = 100000;
 
@@ -24,10 +25,6 @@ public class AbstractBaseEntity {
         this.id = id;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     public Integer id() {
         Assert.notNull(id, "Entity must have id");
         return id;
@@ -39,6 +36,11 @@ public class AbstractBaseEntity {
 
     public boolean isNew() {
         return this.id == null;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
     }
 
     @Override

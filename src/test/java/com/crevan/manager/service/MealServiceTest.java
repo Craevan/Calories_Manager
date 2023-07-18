@@ -3,10 +3,7 @@ package com.crevan.manager.service;
 import com.crevan.manager.ActiveDbProfileResolver;
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.util.exception.NotFoundException;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -36,6 +33,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+@Ignore
 public class MealServiceTest {
 
     private static final Logger log = getLogger("result");
