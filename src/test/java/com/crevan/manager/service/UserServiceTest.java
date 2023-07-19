@@ -5,6 +5,7 @@ import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
 import com.crevan.manager.util.exception.NotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.cache.CacheManager;
 import java.util.List;
 
 import static com.crevan.manager.UserTestData.*;
@@ -32,10 +34,18 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setup() {
+        cacheManager.getCache("users").clear();
+    }
+
     @Test
     public void create() {
         User created = service.create(getNew());
-        Integer newId = created.getId();
+        Integer newId = created.id();
         User newUser = getNew();
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);

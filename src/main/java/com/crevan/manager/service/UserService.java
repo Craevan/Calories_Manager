@@ -2,6 +2,8 @@ package com.crevan.manager.service;
 
 import com.crevan.manager.model.User;
 import com.crevan.manager.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -19,11 +21,13 @@ public class UserService {
         this.repository = repository;
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public User create(final User user) {
         Assert.notNull(user, "user must be not null");
         return repository.save(user);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(final int id) {
         checkNotFoundWithId(repository.delete(id), id);
     }
@@ -37,10 +41,12 @@ public class UserService {
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
+    @Cacheable("users")
     public List<User> getAll() {
         return repository.getAll();
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public void update(final User user) {
         Assert.notNull(user, "user must be not null");
         checkNotFoundWithId(repository.save(user), user.getId());
