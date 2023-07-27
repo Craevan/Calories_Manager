@@ -1,8 +1,9 @@
 package com.crevan.manager.repository.jdbc;
 
+import com.crevan.manager.Profiles;
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.repository.MealRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,11 +13,11 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
-public class JdbcMealRepository implements MealRepository {
+public abstract class JdbcMealRepository<T> implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -24,13 +25,27 @@ public class JdbcMealRepository implements MealRepository {
     private final SimpleJdbcInsert jdbcInsert;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
-    public JdbcMealRepository(final JdbcTemplate jdbcTemplate, final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    JdbcMealRepository(final JdbcTemplate jdbcTemplate, final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meal")
                 .usingGeneratedKeyColumns("id");
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    protected abstract T toDbDateTime(final LocalDateTime ldt);
+
+    @Repository
+    @Profile(Profiles.HSQL_DB)
+    public static class TimestampJdbcMealRepository extends JdbcMealRepository<Timestamp> {
+        public TimestampJdbcMealRepository(final JdbcTemplate jdbcTemplate, final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+            super(jdbcTemplate, namedParameterJdbcTemplate);
+        }
+
+        @Override
+        protected Timestamp toDbDateTime(final LocalDateTime ldt) {
+            return Timestamp.valueOf(ldt);
+        }
     }
 
     @Override
@@ -39,7 +54,7 @@ public class JdbcMealRepository implements MealRepository {
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", meal.getDateTime())
+                .addValue("date_time", toDbDateTime(meal.getDateTime()))
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
@@ -79,7 +94,7 @@ public class JdbcMealRepository implements MealRepository {
     public List<Meal> getBetweenHalfOpen(final LocalDateTime start, final LocalDateTime end, final int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meal WHERE user_id=? AND date_time >= ? AND date_time < ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, start, end
+                ROW_MAPPER, userId, toDbDateTime(start), toDbDateTime(end)
         );
     }
 }
