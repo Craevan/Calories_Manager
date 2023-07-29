@@ -54,6 +54,10 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_COUNT;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("dateTime DESC")
+    List<Meal> meals;
+
     public User() {
 
     }
@@ -122,6 +126,10 @@ public class User extends AbstractNamedEntity {
 
     public void setCaloriesPerDay(final int caloriesPerDay) {
         this.caloriesPerDay = caloriesPerDay;
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
     }
 
     @Override

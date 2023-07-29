@@ -15,4 +15,8 @@ public interface UserRepository {
     List<User> getAll();
 
     boolean delete(final int id);
+
+    default User getWithMeals(final int id) {
+        throw new UnsupportedOperationException();
+    }
 }
