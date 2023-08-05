@@ -13,6 +13,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.crevan.manager.util.ValidationUtil.getRootCause;
+import static org.junit.Assert.assertThrows;
+
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
@@ -27,4 +30,14 @@ public abstract class AbstractServiceTest {
 
     @Rule
     public Stopwatch stopwatch = TimingRule.STOPWATCH;
+
+    protected <T extends Throwable> void validateRootCause(final Class<T> rootExceptionClass, final Runnable runnable) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
+    }
 }

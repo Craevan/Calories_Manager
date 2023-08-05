@@ -2,6 +2,8 @@ package com.crevan.manager.util;
 
 import com.crevan.manager.model.AbstractBaseEntity;
 import com.crevan.manager.util.exception.NotFoundException;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.lang.NonNull;
 
 public class ValidationUtil {
 
@@ -41,4 +43,11 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
     }
+
+    @NonNull
+    public static Throwable getRootCause(@NonNull final Throwable t) {
+        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
+        return rootCause != null ? rootCause : t;
+    }
+
 }
