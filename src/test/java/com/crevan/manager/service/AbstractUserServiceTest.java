@@ -3,6 +3,7 @@ package com.crevan.manager.service;
 import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
+import com.crevan.manager.repository.jpa.JpaUtil;
 import com.crevan.manager.util.exception.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +27,13 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
+    @Autowired
+    private JpaUtil jpaUtil;
+
     @Before
     public void setup() {
         cacheManager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
