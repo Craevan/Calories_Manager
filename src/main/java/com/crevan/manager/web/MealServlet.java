@@ -1,11 +1,11 @@
 package com.crevan.manager.web;
 
-import com.crevan.manager.Profiles;
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.util.MealsUtil;
 import com.crevan.manager.web.meal.MealRestController;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,22 +23,12 @@ import static com.crevan.manager.util.DateTimeUtil.parseLocalTime;
 
 public class MealServlet extends HttpServlet {
 
-    private ClassPathXmlApplicationContext springContext;
     private MealRestController mealController;
-
 
     @Override
     public void init() {
-        springContext = new ClassPathXmlApplicationContext(new String[]{"spring/spring-app.xml", "spring/spring-db.xml"}, false);
-        springContext.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
-        springContext.refresh();
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
         mealController = springContext.getBean(MealRestController.class);
-    }
-
-    @Override
-    public void destroy() {
-        springContext.close();
-        super.destroy();
     }
 
     @Override

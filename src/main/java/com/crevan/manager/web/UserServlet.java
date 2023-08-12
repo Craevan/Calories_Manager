@@ -1,7 +1,11 @@
 package com.crevan.manager.web;
 
+import com.crevan.manager.web.user.AdminRestController;
 import org.slf4j.Logger;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +17,19 @@ public class UserServlet extends HttpServlet {
 
     private static final Logger log = getLogger(UserServlet.class);
 
+    private AdminRestController adminRestController;
+
     @Override
-    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
-        log.debug("redirect to users");
-        resp.sendRedirect("users.jsp");
+    public void init() throws ServletException {
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        adminRestController = springContext.getBean(AdminRestController.class);
+    }
+
+    @Override
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException, ServletException {
+        log.debug("getAll");
+        req.setAttribute("users", adminRestController.getAll());
+        req.getRequestDispatcher("/users.jsp").forward(req, resp);
     }
 
     @Override
