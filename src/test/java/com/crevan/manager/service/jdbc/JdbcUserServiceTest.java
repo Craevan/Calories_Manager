@@ -7,6 +7,5 @@ import org.springframework.test.context.ActiveProfiles;
 import static com.crevan.manager.Profiles.JDBC;
 
 @ActiveProfiles(JDBC)
-@Ignore
 public class JdbcUserServiceTest extends AbstractUserServiceTest {
 }

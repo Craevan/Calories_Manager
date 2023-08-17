@@ -4,7 +4,6 @@ import com.crevan.manager.repository.inmemory.InMemoryUserRepository;
 import com.crevan.manager.util.exception.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,7 @@ import static com.crevan.manager.UserTestData.NOT_FOUND;
 import static com.crevan.manager.UserTestData.USER_ID;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/inmemory.xml"})
-@Ignore
+@ContextConfiguration({"classpath:spring/inmemory.xml"})
 public class InMemoryAdminRestControllerSpringTest {
 
     @Autowired
