@@ -4,6 +4,7 @@ import com.crevan.manager.model.AbstractBaseEntity;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,6 +17,7 @@ public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     final Map<Integer, T> map = new ConcurrentHashMap<>();
 
     public T save(final T entity) {
+        Objects.requireNonNull(entity, "Entity must be not null");
         if (entity.isNew()) {
             entity.setId(counter.incrementAndGet());
             map.put(entity.getId(), entity);
@@ -38,6 +40,7 @@ public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     }
 
     void put(T entity) {
+        Objects.requireNonNull(entity, "Entity must be not null");
         map.put(entity.getId(), entity);
     }
 }

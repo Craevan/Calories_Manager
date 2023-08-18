@@ -5,6 +5,9 @@ import com.crevan.manager.util.exception.NotFoundException;
 
 public class ValidationUtil {
 
+    private ValidationUtil() {
+    }
+
     public static <T> T checkNotFoundWithId(final T object, final int id) {
         checkNotFoundWithId(object != null, id);
         return object;
@@ -34,7 +37,7 @@ public class ValidationUtil {
     public static void assureIdConsistent(final AbstractBaseEntity entity, final int id) {
         if (entity.isNew()) {
             entity.setId(id);
-        } else if (entity.getId() != id) {
+        } else if (entity.id() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
     }
