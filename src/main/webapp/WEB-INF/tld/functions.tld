@@ -6,7 +6,7 @@
 
     <tlib-version>1.0</tlib-version>
     <short-name>functions</short-name>
-    <uri>http://cm.siverskii.dev/functions</uri>
+    <uri>https://cm.crevan.dev/functions</uri>
 
     <function>
         <name>formatDateTime</name>
