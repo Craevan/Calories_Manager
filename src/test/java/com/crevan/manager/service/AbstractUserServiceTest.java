@@ -1,6 +1,5 @@
 package com.crevan.manager.service;
 
-import com.crevan.manager.UserTestData;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
 import com.crevan.manager.repository.jpa.JpaUtil;
@@ -68,8 +67,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void get() {
-        User user = service.get(USER_ID);
-        USER_MATCHER.assertMatch(user, UserTestData.user);
+        User user = service.get(ADMIN_ID);
+        USER_MATCHER.assertMatch(user, admin);
     }
 
     @Test
