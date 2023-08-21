@@ -1,4 +1,4 @@
-package com.crevan.manager.repository.jpa;
+package com.crevan.manager.repository;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
