@@ -2,7 +2,7 @@ package com.crevan.manager.service;
 
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
-import com.crevan.manager.repository.jpa.JpaUtil;
+import com.crevan.manager.repository.JpaUtil;
 import com.crevan.manager.util.exception.NotFoundException;
 import org.junit.Assume;
 import org.junit.Before;
