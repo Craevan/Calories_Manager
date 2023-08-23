@@ -3,6 +3,7 @@ package com.crevan.manager.repository.jdbc;
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
 import com.crevan.manager.repository.UserRepository;
+import com.crevan.manager.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -39,6 +40,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(final User user) {
+        ValidationUtil.validate(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 
         if (user.isNew()) {

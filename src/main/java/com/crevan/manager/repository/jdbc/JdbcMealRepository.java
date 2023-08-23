@@ -2,6 +2,7 @@ package com.crevan.manager.repository.jdbc;
 
 import com.crevan.manager.model.Meal;
 import com.crevan.manager.repository.MealRepository;
+import com.crevan.manager.util.ValidationUtil;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +37,7 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(final Meal meal, final int userId) {
+        ValidationUtil.validate(meal);
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())

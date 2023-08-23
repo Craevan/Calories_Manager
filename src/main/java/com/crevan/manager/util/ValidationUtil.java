@@ -5,7 +5,17 @@ import com.crevan.manager.util.exception.NotFoundException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 
+import javax.validation.*;
+import java.util.Set;
+
 public class ValidationUtil {
+
+    private static final Validator validator;
+
+    static {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     private ValidationUtil() {
     }
@@ -13,6 +23,13 @@ public class ValidationUtil {
     public static <T> T checkNotFoundWithId(final T object, final int id) {
         checkNotFoundWithId(object != null, id);
         return object;
+    }
+
+    public static <T> void validate(final T bean) {
+        Set<ConstraintViolation<T>> violations = validator.validate(bean);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
     }
 
     public static void checkNotFoundWithId(final boolean found, final int id) {
