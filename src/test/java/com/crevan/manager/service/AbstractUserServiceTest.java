@@ -2,14 +2,11 @@ package com.crevan.manager.service;
 
 import com.crevan.manager.model.Role;
 import com.crevan.manager.model.User;
-import com.crevan.manager.repository.JpaUtil;
 import com.crevan.manager.util.exception.NotFoundException;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
-import javax.cache.CacheManager;
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.List;
@@ -22,20 +19,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected UserService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
-    private JpaUtil jpaUtil;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("users").clear();
-        if (isJpaBased()) {
-            jpaUtil.clear2ndLevelHibernateCache();
-        }
-    }
 
     @Test
     public void create() {
