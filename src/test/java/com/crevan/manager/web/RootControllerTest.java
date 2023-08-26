@@ -1,7 +1,7 @@
 package com.crevan.manager.web;
 
 import com.crevan.manager.UserTestData;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.crevan.manager.model.AbstractBaseEntity.START_SEQ;
 import static org.hamcrest.Matchers.*;
@@ -9,10 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class RootControllerTest extends AbstractControllerTest {
+class RootControllerTest extends AbstractControllerTest {
 
     @Test
-    public void getUser() throws Exception {
+    void getUser() throws Exception {
         perform(get("/users"))
                 .andDo(print())
                 .andExpect(view().name("users"))

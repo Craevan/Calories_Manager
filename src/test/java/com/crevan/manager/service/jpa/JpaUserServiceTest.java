@@ -6,5 +6,5 @@ import org.springframework.test.context.ActiveProfiles;
 import static com.crevan.manager.Profiles.JPA;
 
 @ActiveProfiles(JPA)
-public class JpaUserServiceTest extends AbstractUserServiceTest {
+class JpaUserServiceTest extends AbstractUserServiceTest {
 }
