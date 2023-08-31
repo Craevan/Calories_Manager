@@ -10,7 +10,7 @@ import static com.crevan.manager.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
 
-    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldComparator("registered", "meals");
+    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldComparator(User.class, "registered", "meals");
 
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
