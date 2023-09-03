@@ -1,5 +1,6 @@
 package com.crevan.manager.to;
 
+import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ public class MealTo {
     private final LocalDateTime dateTime;
     private final boolean excess;
 
+    @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
     public MealTo(final Integer id, final int calories, final String description, final LocalDateTime dateTime, final boolean excess) {
         this.id = id;
         this.calories = calories;
