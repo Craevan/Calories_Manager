@@ -2,19 +2,18 @@ package com.crevan.manager.web.user;
 
 import com.crevan.manager.repository.inmemory.InMemoryUserRepository;
 import com.crevan.manager.util.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import static com.crevan.manager.UserTestData.NOT_FOUND;
 import static com.crevan.manager.UserTestData.USER_ID;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/inmemory.xml"})
+@SpringJUnitConfig(locations = {
+        "classpath:spring/inmemory.xml"
+})
 public class InMemoryAdminRestControllerSpringTest {
 
     @Autowired
@@ -23,7 +22,7 @@ public class InMemoryAdminRestControllerSpringTest {
     @Autowired
     private InMemoryUserRepository repository;
 
-    @Before
+    @BeforeEach
     public void setup() {
         repository.init();
     }
@@ -31,11 +30,11 @@ public class InMemoryAdminRestControllerSpringTest {
     @Test
     public void delete() {
         repository.delete(USER_ID);
-        Assert.assertNull(repository.get(USER_ID));
+        Assertions.assertNull(repository.get(USER_ID));
     }
 
     @Test
     public void deleteNotFound() {
-        Assert.assertThrows(NotFoundException.class, () -> controller.delete(NOT_FOUND));
+        Assertions.assertThrows(NotFoundException.class, () -> controller.delete(NOT_FOUND));
     }
 }

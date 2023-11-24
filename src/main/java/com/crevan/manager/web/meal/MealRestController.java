@@ -1,71 +1,64 @@
 package com.crevan.manager.web.meal;
 
 import com.crevan.manager.model.Meal;
-import com.crevan.manager.service.MealService;
 import com.crevan.manager.to.MealTo;
-import com.crevan.manager.util.MealsUtil;
-import com.crevan.manager.util.ValidationUtil;
-import com.crevan.manager.web.SecurityUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.lang.Nullable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-public class MealRestController {
+public class MealRestController extends AbstractMealController {
 
-    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+    static final String REST_URL = "/rest/profile/meals";
 
-    private final MealService service;
-
-    public MealRestController(final MealService service) {
-        this.service = service;
+    @Override
+    @GetMapping("/{id}")
+    public Meal get(@PathVariable final int id) {
+        return super.get(id);
     }
 
-    public Meal get(final int id) {
-        int userId = SecurityUtil.authUserId();
-        log.info("Get meal with ID={} for user with ID={}", id, userId);
-        return service.get(id, userId);
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable final int id) {
+        super.delete(id);
     }
 
-    public void delete(final int id) {
-        int userId = SecurityUtil.authUserId();
-        log.info("Delete meal with ID={} for user with ID={}", id, userId);
-        service.delete(id, userId);
-    }
-
+    @Override
+    @GetMapping
     public List<MealTo> getAll() {
-        int userId = SecurityUtil.authUserId();
-        log.info("Get All for user with ID={}", userId);
-        return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
-
+        return super.getAll();
     }
 
-    public Meal create(final Meal meal) {
-        int userId = SecurityUtil.authUserId();
-        ValidationUtil.checkNew(meal);
-        log.info("Create meal={} for user with ID={}", meal, userId);
-        return service.create(meal, userId);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Meal> createWithLocation(@RequestBody final Meal meal) {
+        Meal created = super.create(meal);
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    public void update(final Meal meal, final int id) {
-        int userId = SecurityUtil.authUserId();
-        ValidationUtil.assureIdConsistent(meal, id);
-        log.info("Update meal={} for user with ID={}", meal, userId);
-        service.update(meal, userId);
-
+    @Override
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody final Meal meal, @PathVariable final int id) {
+        super.update(meal, id);
     }
 
-    public List<MealTo> getBetween(@Nullable final LocalDate startDate, @Nullable final LocalTime startTime,
-                                   @Nullable final LocalDate endDate, @Nullable final LocalTime endTime) {
-
-        int userId = SecurityUtil.authUserId();
-        log.info("Get Between dates({} - {}) time({} - {}) for user with ID={}", startDate, endDate, startTime, endTime, userId);
-        List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
-        return MealsUtil.getFilteredTos(mealsDateFiltered, MealsUtil.DEFAULT_CALORIES_COUNT, startTime, endTime);
+    @GetMapping("/between")
+    public List<MealTo> getBetween(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime startDateTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime endDateTime) {
+        return super.getBetween(startDateTime.toLocalDate(), startDateTime.toLocalTime(),
+                endDateTime.toLocalDate(), endDateTime.toLocalTime());
     }
 }
